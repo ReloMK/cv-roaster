@@ -940,7 +940,8 @@ async function callGemini(prompt) {
   const res = await fetch(API_URL, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1bnJ6YmxxZ2dnbGdpcm5nbmtsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0Mjk5ODgsImV4cCI6MjA5MDAwNTk4OH0.v_xoxipN_2v5ubtwiwSvctofGoufwhmaUacjLXgQdCI"
     },
     body: JSON.stringify({
       prompt: prompt
@@ -950,6 +951,7 @@ async function callGemini(prompt) {
   const data = await res.json();
 
   if (!data.text) {
+    console.error(data);
     throw new Error("No response from AI");
   }
 
