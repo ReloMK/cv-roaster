@@ -7,17 +7,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Syne+Mono&family=Epilogue:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0d0d0d;
-  --surface: #141414;
-  --surface2: #1a1a1a;
-  --border: #2a2a2a;
-  --fire: #ff4d00;
-  --fire2: #ff8c00;
-  --gold: #f5c518;
-  --green: #00d68f;
-  --text: #f0ede6;
-  --muted: #666;
-  --muted2: #444;
+
+--bg-primary: #0f172a;
+--bg-secondary: #1e293b;
+--bg-tertiary: #334155;
+
+--accent-primary: #fb9278;
+--accent-secondary: #a78bfa;
+
+--text-primary: #f1f5f9;
+--text-secondary: #cbd5f5;
+--text-muted: #94a3b8;
+
+--border-subtle: rgba(255,255,255,0.08);
+
+--glow-soft: 0 0 20px rgba(251,146,120,0.25);
+--glow-purple: 0 0 20px rgba(167,139,250,0.25);
+
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -732,7 +738,7 @@ footer {
       </div>
 
       <div class="job-field">
-        <label class="field-label">Target job title or role (optional)</label>
+        <label class="field-label">Target job title or role (optional, but ADVISED!)</label>
         <input class="job-input" type="text" id="jobTarget" placeholder="e.g. Senior Software Engineer, Marketing Manager, Financial Analyst…">
       </div>
 
