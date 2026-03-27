@@ -29,21 +29,34 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Epilogue', sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+  background: linear-gradient(
+    180deg,
+    var(--bg-primary) 0%,
+    var(--bg-secondary) 60%,
+    var(--bg-tertiary) 100%
+  );
+  color: var(--text-primary);
 
 body::before {
   content: '';
   position: fixed;
   top: -50%; left: -50%;
   width: 200%; height: 200%;
-  background: radial-gradient(ellipse at 20% 50%, rgba(255,77,0,0.04) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 20%, rgba(255,140,0,0.03) 0%, transparent 40%),
-              radial-gradient(ellipse at 60% 80%, rgba(255,77,0,0.02) 0%, transparent 40%);
+  background: radial-gradient(
+              ellipse at 20% 50%,
+              rgba(167,139,250,0.05) 0%,
+              transparent 50%
+            ),
+            radial-gradient(
+              ellipse at 80% 20%,
+              rgba(251,146,120,0.05) 0%,
+              transparent 40%
+            ),
+            radial-gradient(
+              ellipse at 60% 80%,
+              rgba(167,139,250,0.04) 0%,
+              transparent 40%
+            );
   pointer-events: none;
   z-index: 0;
   animation: bgShift 12s ease-in-out infinite alternate;
