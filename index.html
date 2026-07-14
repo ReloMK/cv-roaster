@@ -17,14 +17,36 @@
 body { background: var(--bg); color: var(--text); font-family: 'Epilogue', sans-serif; min-height: 100vh; overflow-x: hidden; }
 body::before { content: ''; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(ellipse at 20% 50%, rgba(255,77,0,0.04) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(168,85,247,0.03) 0%, transparent 40%); pointer-events: none; z-index: 0; animation: bgShift 12s ease-in-out infinite alternate; }
 @keyframes bgShift { from { transform: translate(0,0); } to { transform: translate(2%,2%); } }
+
+/* ── PAGES ── */
 .page { display: none; position: relative; z-index: 1; }
 .page.active { display: block; }
 .wrap { max-width: 780px; margin: 0 auto; padding: 0 20px 80px; }
 .wrap-wide { max-width: 1000px; margin: 0 auto; padding: 0 20px 80px; }
+
+/* ── NAV ── */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(13,13,13,0.85); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px; height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; cursor: pointer; }
+.nav-logo span { background: linear-gradient(135deg, var(--fire), var(--fire2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.nav-btn { padding: 8px 18px; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; border: none; }
+.nav-ghost { background: none; border: 1px solid var(--border); color: var(--muted); }
+.nav-ghost:hover { border-color: var(--text); color: var(--text); }
+.nav-fire { background: linear-gradient(135deg, var(--fire), var(--fire2)); color: white; }
+.nav-fire:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(255,77,0,0.3); }
+.nav-avatar { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--fire2); cursor: pointer; object-fit: cover; }
+.nav-user { display: flex; align-items: center; gap: 10px; }
+.nav-user-name { font-size: 13px; color: var(--muted); font-family: 'Syne Mono', monospace; }
+
+/* ── HERO ── */
 .hero { padding: 64px 0 48px; text-align: center; }
 .badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,77,0,0.12); border: 1px solid rgba(255,77,0,0.3); border-radius: 100px; padding: 6px 16px; font-family: 'Syne Mono', monospace; font-size: 11px; letter-spacing: 0.12em; color: var(--fire2); margin-bottom: 28px; animation: fadeDown 0.6s ease-out both; }
-.wall-link { display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(168,85,247,0.3); border-radius: 8px; padding: 8px 20px; color: var(--purple); font-family: 'Syne Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; margin-top: 16px; background: none; }
-.wall-link:hover { background: rgba(168,85,247,0.1); border-color: var(--purple); }
 .hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(42px, 8vw, 72px); font-weight: 800; line-height: 0.95; letter-spacing: -2px; margin-bottom: 20px; animation: fadeDown 0.6s 0.1s ease-out both; }
 .hero h1 .fire-text { background: linear-gradient(135deg, var(--fire), var(--fire2), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .hero p { font-size: 17px; color: #999; line-height: 1.6; max-width: 480px; margin: 0 auto 32px; font-weight: 300; animation: fadeDown 0.6s 0.2s ease-out both; }
@@ -32,8 +54,12 @@ body::before { content: ''; position: fixed; top: -50%; left: -50%; width: 200%;
 .stat { text-align: center; }
 .stat-num { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: var(--fire2); }
 .stat-label { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; font-family: 'Syne Mono', monospace; text-transform: uppercase; }
+.wall-link { display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(168,85,247,0.3); border-radius: 8px; padding: 8px 20px; color: var(--purple); font-family: 'Syne Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; margin-top: 16px; background: none; }
+.wall-link:hover { background: rgba(168,85,247,0.1); border-color: var(--purple); }
 @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── INPUT CARD ── */
 .upload-section { animation: fadeUp 0.6s 0.4s ease-out both; }
 .tabs { display: flex; gap: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px 10px 0 0; padding: 6px; }
 .tab { flex: 1; padding: 10px; background: none; border: none; border-radius: 7px; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; transition: all 0.2s; }
@@ -57,12 +83,16 @@ textarea.cv-text::placeholder { color: var(--muted2); }
 input.job-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; color: var(--text); font-family: 'Epilogue', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; }
 input.job-input:focus { border-color: var(--fire); }
 input.job-input::placeholder { color: var(--muted2); }
+
+/* ── BUTTONS ── */
 .roast-btn { width: 100%; margin-top: 20px; padding: 18px 24px; background: linear-gradient(135deg, var(--fire), var(--fire2)); border: none; border-radius: 10px; color: white; font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 800; letter-spacing: 0.03em; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; position: relative; overflow: hidden; }
 .roast-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--fire2), var(--gold)); opacity: 0; transition: opacity 0.3s; }
 .roast-btn:hover::before { opacity: 1; }
 .roast-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255,77,0,0.4); }
 .roast-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
 .roast-btn span { position: relative; z-index: 1; }
+
+/* ── LOADING ── */
 .loading { display: none; text-align: center; padding: 64px 24px; }
 .loading.visible { display: block; }
 .fire-loader { font-size: 48px; animation: fireShake 0.5s ease-in-out infinite alternate; display: block; margin-bottom: 20px; }
@@ -72,6 +102,33 @@ input.job-input::placeholder { color: var(--muted2); }
 .loading-bar { width: 200px; height: 3px; background: var(--border); border-radius: 2px; margin: 20px auto 0; overflow: hidden; }
 .loading-bar-fill { height: 100%; background: linear-gradient(90deg, var(--fire), var(--fire2)); border-radius: 2px; animation: loadBar 2.5s ease-in-out infinite; }
 @keyframes loadBar { 0% { width: 0%; margin-left: 0; } 50% { width: 70%; } 100% { width: 0%; margin-left: 100%; } }
+
+/* ── AUTH GATE ── */
+.auth-gate { background: var(--surface); border: 1px solid rgba(168,85,247,0.3); border-radius: 16px; padding: 48px 32px; text-align: center; margin: 32px 0; position: relative; overflow: hidden; display: none; }
+.auth-gate::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(168,85,247,0.08) 0%, transparent 60%); pointer-events: none; }
+.auth-gate.visible { display: block; }
+.auth-gate h2 { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; margin-bottom: 10px; }
+.auth-gate h2 em { font-style: normal; background: linear-gradient(135deg, var(--fire2), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.auth-gate p { color: #888; font-size: 15px; margin-bottom: 28px; line-height: 1.6; max-width: 360px; margin-left: auto; margin-right: auto; }
+.google-btn { display: inline-flex; align-items: center; gap: 12px; padding: 14px 32px; background: white; border: none; border-radius: 10px; color: #1a1a1a; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.google-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255,255,255,0.15); }
+.google-icon { width: 20px; height: 20px; }
+
+/* ── LOGIN PAGE ── */
+.login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+.login-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 48px 40px; max-width: 420px; width: 100%; text-align: center; position: relative; overflow: hidden; }
+.login-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--fire), var(--fire2), var(--purple)); }
+.login-logo { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; margin-bottom: 8px; }
+.login-logo span { background: linear-gradient(135deg, var(--fire), var(--fire2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.login-tagline { font-size: 14px; color: #888; margin-bottom: 40px; line-height: 1.5; }
+.login-divider { display: flex; align-items: center; gap: 16px; margin: 28px 0; }
+.login-divider::before, .login-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.login-divider span { font-size: 11px; color: var(--muted); font-family: 'Syne Mono', monospace; letter-spacing: 0.1em; }
+.login-features { display: flex; flex-direction: column; gap: 10px; margin-top: 32px; text-align: left; }
+.login-feature { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: #aaa; }
+.login-feature-icon { font-size: 18px; flex-shrink: 0; }
+
+/* ── SCORE CARD ── */
 .score-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px; margin-bottom: 20px; text-align: center; position: relative; overflow: hidden; }
 .score-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--fire), var(--fire2), var(--gold)); }
 .score-label { font-family: 'Syne Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
@@ -79,6 +136,8 @@ input.job-input::placeholder { color: var(--muted2); }
 .score-number.bad { color: var(--fire); } .score-number.ok { color: var(--fire2); } .score-number.good { color: var(--gold); } .score-number.great { color: var(--green); }
 .score-verdict { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
 .score-tagline { font-size: 14px; color: #888; font-style: italic; max-width: 400px; margin: 0 auto; }
+
+/* ── ROAST BLOCKS ── */
 .roast-grid { display: grid; gap: 16px; margin-bottom: 20px; }
 .roast-block { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; animation: fadeUp 0.4s ease-out both; }
 .roast-block-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
@@ -89,6 +148,8 @@ input.job-input::placeholder { color: var(--muted2); }
 .roast-items li { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; line-height: 1.6; color: #ccc; display: flex; gap: 10px; }
 .roast-items li:last-child { border-bottom: none; padding-bottom: 0; }
 .roast-items li::before { content: '→'; color: var(--fire); flex-shrink: 0; margin-top: 1px; }
+
+/* ── PAYWALL ── */
 .paywall { background: var(--surface); border: 1px solid rgba(168,85,247,0.3); border-radius: 16px; padding: 40px 32px; text-align: center; position: relative; overflow: hidden; margin-bottom: 20px; }
 .paywall::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(168,85,247,0.08) 0%, transparent 60%); pointer-events: none; }
 .lock-icon { font-size: 36px; display: block; margin-bottom: 16px; animation: lockBounce 2s ease-in-out infinite; }
@@ -108,6 +169,8 @@ input.job-input::placeholder { color: var(--muted2); }
 .pay-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(168,85,247,0.4); }
 .secure-note { margin-top: 12px; font-size: 11px; color: var(--muted); font-family: 'Syne Mono', monospace; letter-spacing: 0.06em; }
 .blurred-preview { filter: blur(6px); pointer-events: none; user-select: none; opacity: 0.4; margin-bottom: -20px; max-height: 120px; overflow: hidden; }
+
+/* ── SUCCESS PAGE ── */
 .success-header { text-align: center; padding: 48px 0 32px; }
 .success-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(0,214,143,0.1); border: 1px solid rgba(0,214,143,0.3); border-radius: 100px; padding: 8px 20px; color: var(--green); font-family: 'Syne Mono', monospace; font-size: 11px; letter-spacing: 0.12em; margin-bottom: 20px; }
 .success-header h1 { font-family: 'Syne', sans-serif; font-size: clamp(28px,5vw,44px); font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; }
@@ -119,9 +182,8 @@ input.job-input::placeholder { color: var(--muted2); }
 .pkg-card p { font-size: 14px; color: #ccc; line-height: 1.6; }
 .pkg-block { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 20px; }
 .pkg-block-header { padding: 16px 20px; border-bottom: 1px solid var(--border); background: var(--surface2); display: flex; align-items: center; justify-content: space-between; }
-.pkg-block-header-left { display: flex; align-items: center; gap: 10px; }
 .pkg-block-label { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; }
-.pkg-block-label.green { color: var(--green); } .pkg-block-label.fire2 { color: var(--fire2); } .pkg-block-label.purple { color: var(--purple); }
+.pkg-block-label.green { color: var(--green); } .pkg-block-label.fire2 { color: var(--fire2); }
 .pkg-block-body { padding: 20px; }
 .pkg-block-body pre { font-family: 'Syne Mono', monospace; font-size: 12px; color: #bbb; white-space: pre-wrap; line-height: 1.7; max-height: 240px; overflow-y: auto; }
 .latex-block { background: linear-gradient(135deg, rgba(168,85,247,0.05), rgba(255,140,0,0.05)); border: 2px solid rgba(168,85,247,0.3); border-radius: 16px; overflow: hidden; margin-bottom: 20px; }
@@ -135,6 +197,34 @@ input.job-input::placeholder { color: var(--muted2); }
 .overleaf-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(168,85,247,0.4); }
 .overleaf-secondary { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; transition: all 0.2s; }
 .overleaf-secondary:hover { border-color: var(--purple); color: var(--purple); }
+
+/* ── DASHBOARD ── */
+.dashboard-header { padding: 48px 0 32px; }
+.dashboard-header h1 { font-family: 'Syne', sans-serif; font-size: clamp(28px,5vw,42px); font-weight: 800; letter-spacing: -1px; margin-bottom: 6px; }
+.dashboard-header p { color: #888; font-size: 14px; }
+.dashboard-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
+.dash-stat { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
+.dash-stat-num { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; color: var(--fire2); margin-bottom: 4px; }
+.dash-stat-label { font-size: 11px; color: var(--muted); font-family: 'Syne Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+.history-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 12px; display: flex; align-items: center; gap: 20px; cursor: pointer; transition: all 0.2s; }
+.history-card:hover { border-color: rgba(255,77,0,0.3); transform: translateX(4px); }
+.history-score { flex-shrink: 0; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: white; }
+.history-score.bad { background: linear-gradient(135deg, var(--fire), #c73a00); }
+.history-score.ok { background: linear-gradient(135deg, var(--fire2), var(--fire)); }
+.history-score.good { background: linear-gradient(135deg, var(--gold), var(--fire2)); }
+.history-score.great { background: linear-gradient(135deg, var(--green), #00a86b); }
+.history-info { flex: 1; }
+.history-verdict { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.history-meta { font-size: 12px; color: var(--muted); font-family: 'Syne Mono', monospace; display: flex; gap: 12px; }
+.history-status { font-size: 11px; padding: 3px 10px; border-radius: 100px; font-family: 'Syne Mono', monospace; letter-spacing: 0.08em; }
+.history-status.free { background: rgba(255,77,0,0.1); color: var(--fire2); border: 1px solid rgba(255,77,0,0.2); }
+.history-status.paid { background: rgba(0,214,143,0.1); color: var(--green); border: 1px solid rgba(0,214,143,0.2); }
+.empty-state { text-align: center; padding: 64px 24px; }
+.empty-state-icon { font-size: 48px; display: block; margin-bottom: 16px; }
+.empty-state h3 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.empty-state p { color: #888; font-size: 14px; margin-bottom: 24px; }
+
+/* ── WALL OF SHAME ── */
 .wall-header { text-align: center; padding: 64px 0 48px; }
 .wall-header h1 { font-family: 'Syne', sans-serif; font-size: clamp(36px, 7vw, 64px); font-weight: 800; letter-spacing: -2px; margin-bottom: 16px; }
 .wall-header h1 span { background: linear-gradient(135deg, #f87171, var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
@@ -153,11 +243,13 @@ input.job-input::placeholder { color: var(--muted2); }
 .shame-job { font-size: 13px; color: var(--fire2); font-style: italic; }
 .shame-date { font-size: 11px; color: var(--muted); font-family: 'Syne Mono', monospace; margin-left: auto; }
 .shame-verdict { font-size: 14px; color: #ccc; font-style: italic; border-left: 3px solid rgba(239,68,68,0.5); padding-left: 12px; line-height: 1.5; }
-.back-btn { display: inline-flex; align-items: center; gap: 8px; color: var(--purple); font-family: 'Syne Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; background: none; border: none; cursor: pointer; padding: 0; margin-bottom: 24px; transition: opacity 0.2s; }
-.back-btn:hover { opacity: 0.7; }
 .wall-cta { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 32px; text-align: center; margin-top: 32px; }
 .wall-cta h3 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--fire2); margin-bottom: 8px; }
 .wall-cta p { color: #888; font-size: 14px; margin-bottom: 20px; }
+
+/* ── MISC ── */
+.back-btn { display: inline-flex; align-items: center; gap: 8px; color: var(--purple); font-family: 'Syne Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; background: none; border: none; cursor: pointer; padding: 0; margin-bottom: 24px; transition: opacity 0.2s; }
+.back-btn:hover { opacity: 0.7; }
 .copy-btn { background: none; border: 1px solid var(--border); border-radius: 6px; padding: 6px 14px; color: var(--muted); font-family: 'Syne Mono', monospace; font-size: 10px; letter-spacing: 0.1em; cursor: pointer; transition: all 0.15s; }
 .copy-btn:hover { border-color: var(--green); color: var(--green); }
 .copy-btn.copied { background: var(--green); color: #0d0d0d; border-color: var(--green); }
@@ -166,20 +258,39 @@ input.job-input::placeholder { color: var(--muted2); }
 .reset-btn:hover { border-color: var(--text); color: var(--text); }
 .err-box { display: none; background: rgba(255,77,0,0.08); border: 1px solid rgba(255,77,0,0.2); border-radius: 8px; padding: 14px 18px; color: var(--fire2); font-size: 13px; font-family: 'Syne Mono', monospace; margin-top: 12px; }
 .err-box.visible { display: block; }
-footer { text-align: center; padding: 40px 0 20px; font-size: 12px; color: var(--muted2); font-family: 'Syne Mono', monospace; letter-spacing: 0.06em; }
+footer { text-align: center; padding: 40px 0 20px; font-size: 12px; color: var(--muted2); font-family: 'Syne Mono', monospace; letter-spacing: 0.06em; position: relative; z-index: 1; }
+
 @media (max-width: 560px) {
-  .paywall-features { grid-template-columns: 1fr; }
-  .overleaf-buttons { grid-template-columns: 1fr; }
-  .package-grid { grid-template-columns: 1fr; }
+  .paywall-features, .overleaf-buttons, .package-grid, .dashboard-stats { grid-template-columns: 1fr; }
   .stats-row { gap: 16px; }
   .paywall { padding: 28px 20px; }
   .shame-card { flex-direction: column; }
+  .nav-user-name { display: none; }
+  .history-card { flex-direction: column; gap: 12px; }
 }
 </style>
 </head>
 <body>
 
-<!-- PAGE 1: HOME -->
+<!-- ── NAV ── -->
+<nav class="nav">
+  <div class="nav-logo" onclick="showPage('page-home')">CV <span>Roasted</span></div>
+  <div class="nav-right">
+    <div id="navGuest" style="display:flex;gap:8px;">
+      <button class="nav-btn nav-ghost" onclick="showPage('page-login')">Log In</button>
+      <button class="nav-btn nav-fire" onclick="showPage('page-login')">Sign Up Free</button>
+    </div>
+    <div id="navUser" class="nav-user" style="display:none;">
+      <span class="nav-user-name" id="navUserName"></span>
+      <button class="nav-btn nav-ghost" onclick="showPage('page-dashboard')">My Roasts</button>
+      <button class="nav-btn nav-ghost" onclick="signOut()">Sign Out</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     PAGE: HOME
+══════════════════════════════════════════ -->
 <div class="page active" id="page-home">
 <div class="wrap">
   <div class="hero">
@@ -193,6 +304,7 @@ footer { text-align: center; padding: 40px 0 20px; font-size: 12px; color: var(-
     </div>
     <button class="wall-link" onclick="showPage('page-wall')">💀 View Wall of Shame</button>
   </div>
+
   <div class="upload-section" id="uploadSection">
     <div class="tabs">
       <button class="tab active" onclick="switchTab('pdf')">📄 Upload PDF</button>
@@ -218,16 +330,56 @@ footer { text-align: center; padding: 40px 0 20px; font-size: 12px; color: var(-
       <div class="err-box" id="errBox"></div>
     </div>
   </div>
+
   <div class="loading" id="loadingState">
     <span class="fire-loader">🔥</span>
     <div class="loading-msg" id="loadingMsg">Reading your CV...</div>
     <div class="loading-sub" id="loadingSub">Preparing brutal feedback</div>
     <div class="loading-bar"><div class="loading-bar-fill"></div></div>
   </div>
+
+  <!-- Auth gate shown after roast if not logged in -->
+  <div class="auth-gate" id="authGate">
+    <h2>Your Roast is <em>Ready!</em></h2>
+    <p>Sign in with Google to see your CV score, brutal feedback, and save your results. It's free and takes 5 seconds.</p>
+    <button class="google-btn" onclick="signInWithGoogle()">
+      <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Continue with Google
+    </button>
+    <div style="margin-top:16px;font-size:12px;color:var(--muted);font-family:'Syne Mono',monospace;">Free forever · No credit card needed</div>
+  </div>
 </div>
 </div>
 
-<!-- PAGE 2: RESULTS -->
+<!-- ══════════════════════════════════════════
+     PAGE: LOGIN
+══════════════════════════════════════════ -->
+<div class="page" id="page-login">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">CV <span>Roasted</span></div>
+      <div class="login-tagline">Join thousands getting brutal,<br>honest CV feedback that actually works.</div>
+      <button class="google-btn" style="width:100%;justify-content:center;" onclick="signInWithGoogle()">
+        <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Continue with Google
+      </button>
+      <div class="login-divider"><span>WHY SIGN UP</span></div>
+      <div class="login-features">
+        <div class="login-feature"><span class="login-feature-icon">🔥</span>See your full CV roast score & brutal feedback</div>
+        <div class="login-feature"><span class="login-feature-icon">📂</span>Save and access all your past roasts</div>
+        <div class="login-feature"><span class="login-feature-icon">✍️</span>Unlock full CV rewrite for just R50</div>
+        <div class="login-feature"><span class="login-feature-icon">📐</span>Get LaTeX code + Overleaf formatted CV</div>
+      </div>
+      <div style="margin-top:24px;">
+        <button class="back-btn" onclick="showPage('page-home')" style="margin:0 auto;display:flex;">← Back to Home</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE: RESULTS
+══════════════════════════════════════════ -->
 <div class="page" id="page-results">
 <div class="wrap">
   <div style="padding-top:48px;">
@@ -242,13 +394,13 @@ footer { text-align: center; padding: 40px 0 20px; font-size: 12px; color: var(-
     <div class="blurred-preview">
       <div class="roast-block">
         <div class="roast-block-header"><span class="roast-icon">✍️</span><span class="roast-block-title green">YOUR REWRITTEN CV</span></div>
-        <p style="color:#555;font-size:13px;line-height:1.7">Results-driven professional with 5+ years driving measurable impact...</p>
+        <p style="color:#555;font-size:13px;line-height:1.7">Results-driven professional with 5+ years driving measurable impact in cloud infrastructure...</p>
       </div>
     </div>
     <div class="paywall">
       <span class="lock-icon">🔐</span>
       <h2>Unlock Your <em>Full Transformation</em></h2>
-      <p>The roast was free. The fix is priceless. CV rewrite, cover letter, LaTeX code + Overleaf link.</p>
+      <p>The roast was free. The fix is priceless. Get a completely rewritten CV, cover letter, LaTeX code and Overleaf link.</p>
       <div class="paywall-features">
         <div class="pw-feature"><span class="pw-feature-icon">✍️</span><div class="pw-feature-text"><strong>Full CV Rewrite</strong>ATS-optimised, recruiter-approved</div></div>
         <div class="pw-feature"><span class="pw-feature-icon">📨</span><div class="pw-feature-text"><strong>Cover Letter</strong>Tailored for your target role</div></div>
@@ -267,7 +419,9 @@ footer { text-align: center; padding: 40px 0 20px; font-size: 12px; color: var(-
 </div>
 </div>
 
-<!-- PAGE 3: SUCCESS -->
+<!-- ══════════════════════════════════════════
+     PAGE: SUCCESS
+══════════════════════════════════════════ -->
 <div class="page" id="page-success">
 <div class="wrap">
   <div class="success-header">
@@ -288,14 +442,14 @@ footer { text-align: center; padding: 40px 0 20px; font-size: 12px; color: var(-
   </div>
   <div class="pkg-block">
     <div class="pkg-block-header">
-      <div class="pkg-block-header-left"><span>✍️</span><span class="pkg-block-label green">Professional CV Rewrite</span></div>
+      <div style="display:flex;align-items:center;gap:10px;"><span>✍️</span><span class="pkg-block-label green">Professional CV Rewrite</span></div>
       <button class="copy-btn" onclick="copyText(this,document.getElementById('cvRewriteText').textContent)">COPY</button>
     </div>
     <div class="pkg-block-body"><pre id="cvRewriteText">Generating your CV rewrite...</pre></div>
   </div>
   <div class="pkg-block">
     <div class="pkg-block-header">
-      <div class="pkg-block-header-left"><span>📨</span><span class="pkg-block-label fire2">Tailored Cover Letter</span></div>
+      <div style="display:flex;align-items:center;gap:10px;"><span>📨</span><span class="pkg-block-label fire2">Tailored Cover Letter</span></div>
       <button class="copy-btn" onclick="copyText(this,document.getElementById('coverLetterText').textContent)">COPY</button>
     </div>
     <div class="pkg-block-body"><pre id="coverLetterText">Generating cover letter...</pre></div>
@@ -318,7 +472,36 @@ footer { text-align: center; padding: 40px 0 20px; font-size: 12px; color: var(-
 </div>
 </div>
 
-<!-- PAGE 4: WALL OF SHAME -->
+<!-- ══════════════════════════════════════════
+     PAGE: DASHBOARD
+══════════════════════════════════════════ -->
+<div class="page" id="page-dashboard">
+<div class="wrap">
+  <div class="dashboard-header">
+    <h1>My Roasts 🔥</h1>
+    <p id="dashSubtitle">Your CV roasting history</p>
+  </div>
+  <div class="dashboard-stats">
+    <div class="dash-stat"><div class="dash-stat-num" id="dashTotal">0</div><div class="dash-stat-label">Total Roasts</div></div>
+    <div class="dash-stat"><div class="dash-stat-num" id="dashAvg">--</div><div class="dash-stat-label">Avg Score</div></div>
+    <div class="dash-stat"><div class="dash-stat-num" id="dashBest">--</div><div class="dash-stat-label">Best Score</div></div>
+  </div>
+  <div id="dashLoading" style="text-align:center;padding:48px;color:var(--muted);font-family:'Syne Mono',monospace;font-size:13px;">Loading your roasts...</div>
+  <div id="dashList"></div>
+  <div id="dashEmpty" style="display:none;">
+    <div class="empty-state">
+      <span class="empty-state-icon">📄</span>
+      <h3>No roasts yet</h3>
+      <p>Submit your first CV to get started.</p>
+      <button class="roast-btn" style="max-width:280px;margin:0 auto;" onclick="showPage('page-home')"><span>🔥 Roast My CV Now</span></button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE: WALL OF SHAME
+══════════════════════════════════════════ -->
 <div class="page" id="page-wall">
 <div class="wrap-wide">
   <div class="wall-header">
@@ -328,7 +511,7 @@ footer { text-align: center; padding: 40px 0 20px; font-size: 12px; color: var(-
     <p>The worst CVs we've ever seen. Learn from their mistakes. Don't let this be you.</p>
   </div>
   <div id="wallLoading" style="text-align:center;padding:48px;color:var(--muted);font-family:'Syne Mono',monospace;font-size:13px;">Loading the hall of career disasters...</div>
-  <div id="wallEmpty" style="display:none;text-align:center;padding:48px;color:var(--muted)">No shameful CVs yet. Be the first! (Just kidding, don't.)</div>
+  <div id="wallEmpty" style="display:none;text-align:center;padding:48px;color:var(--muted);">No shameful CVs yet — be the first! (Just kidding, don't.)</div>
   <div id="wallList"></div>
   <div class="wall-cta">
     <h3>Don't Want to End Up Here?</h3>
@@ -353,12 +536,12 @@ footer { text-align: center; padding: 40px 0 20px; font-size: 12px; color: var(-
 
 <script>
 // ══════════════════════════════════════════════
-// CONFIG — REPLACE THESE WITH YOUR REAL VALUES
+// ⚙️  CONFIG — REPLACE WITH YOUR REAL VALUES
 // ══════════════════════════════════════════════
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_URL     = 'YOUR_SUPABASE_URL';
 const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
-const GEMINI_API_KEY = 'AIzaSyBwHthqmqPbpwmCRsqrvNUy1rLPUxrz894';
-const APP_URL = 'https://relomk.github.io/cv-roaster';
+const GEMINI_API_KEY   = 'AIzaSyBwHthqmqPbpwmCRsqrvNUy1rLPUxrz894';
+const APP_URL          = 'https://relomk.github.io/cv-roaster';
 // ══════════════════════════════════════════════
 
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${GEMINI_API_KEY}`;
@@ -366,7 +549,8 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-let activeTab = 'pdf', currentCVText = '', currentRoastId = null;
+let activeTab = 'pdf', currentCVText = '', currentRoastId = null, currentUser = null;
+let pendingRoastData = null; // stores roast result while waiting for login
 
 const loadingMessages = [
   { msg: "Reading your CV...", sub: "Every painful word of it" },
@@ -376,25 +560,82 @@ const loadingMessages = [
   { msg: "Writing the verdict...", sub: "Almost done" },
 ];
 
+// ── PAGE ROUTING ──
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
   if (id === 'page-wall') loadWallOfShame();
+  if (id === 'page-dashboard') loadDashboard();
 }
 
+// ── AUTH ──
 window.addEventListener('load', async () => {
+  // Handle OAuth redirect
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session?.user) handleUserSession(session.user);
+
+  // Handle PayFast return
   const params = new URLSearchParams(window.location.search);
   if (params.get('payment') === 'success') {
-    const roastId = sessionStorage.getItem('roastId');
-    const cvText = sessionStorage.getItem('cvText');
-    const jobTarget = sessionStorage.getItem('jobTarget');
     window.history.replaceState({}, document.title, window.location.pathname);
+    const roastId = sessionStorage.getItem('roastId');
+    const cvText  = sessionStorage.getItem('cvText');
+    const jobTarget = sessionStorage.getItem('jobTarget');
     showPage('page-success');
     if (cvText) await generateAndSaveFullPackage(roastId, cvText, jobTarget || '');
   }
+
+  // Listen for auth changes (Google redirect comes back as SIGNED_IN)
+  supabase.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN' && session?.user) {
+      handleUserSession(session.user);
+      // If user just signed in and there's a pending roast — show results
+      if (pendingRoastData) {
+        await saveRoastToSupabase(pendingRoastData.result, pendingRoastData.cvContent, pendingRoastData.jobTarget, session.user.id);
+        renderResults(pendingRoastData.result);
+        document.getElementById('authGate').classList.remove('visible');
+        showPage('page-results');
+        pendingRoastData = null;
+      }
+    }
+    if (event === 'SIGNED_OUT') {
+      currentUser = null;
+      updateNav(null);
+    }
+  });
 });
 
+function handleUserSession(user) {
+  currentUser = user;
+  updateNav(user);
+}
+
+function updateNav(user) {
+  if (user) {
+    document.getElementById('navGuest').style.display = 'none';
+    document.getElementById('navUser').style.display = 'flex';
+    const name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
+    document.getElementById('navUserName').textContent = name;
+  } else {
+    document.getElementById('navGuest').style.display = 'flex';
+    document.getElementById('navUser').style.display = 'none';
+  }
+}
+
+async function signInWithGoogle() {
+  await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: `${APP_URL}/?payment=none` }
+  });
+}
+
+async function signOut() {
+  await supabase.auth.signOut();
+  showPage('page-home');
+}
+
+// ── TABS ──
 function switchTab(tab) {
   activeTab = tab;
   document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', (i === 0 && tab === 'pdf') || (i === 1 && tab === 'text')));
@@ -402,6 +643,7 @@ function switchTab(tab) {
   document.getElementById('textTab').classList.toggle('active-tab', tab === 'text');
 }
 
+// ── FILE HANDLING ──
 function handleFileSelect(e) { const f = e.target.files[0]; if (f) showFileSelected(f); }
 function handleDrop(e) {
   e.preventDefault(); document.getElementById('pdfTab').classList.remove('dragover');
@@ -429,6 +671,7 @@ async function extractPDFText(file) {
   });
 }
 
+// ── GEMINI ──
 async function callGemini(prompt) {
   const res = await fetch(GEMINI_URL, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -439,6 +682,7 @@ async function callGemini(prompt) {
   return data.candidates[0].content.parts[0].text;
 }
 
+// ── ROAST ──
 let loadingInterval;
 
 async function startRoast() {
@@ -459,6 +703,7 @@ async function startRoast() {
   document.getElementById('roastBtn').disabled = true;
   document.getElementById('uploadSection').style.display = 'none';
   document.getElementById('loadingState').classList.add('visible');
+  document.getElementById('authGate').classList.remove('visible');
 
   let idx = 0;
   loadingInterval = setInterval(() => {
@@ -467,44 +712,41 @@ async function startRoast() {
     document.getElementById('loadingSub').textContent = loadingMessages[idx].sub;
   }, 2200);
 
-  const prompt = `You are a brutally honest senior recruiter with 15+ years hiring across South Africa and globally. Analyse this CV and respond ONLY with valid JSON, no markdown fences.
+  const prompt = `You are a brutally honest senior recruiter with 15+ years hiring across South Africa and globally. Analyse this CV and respond ONLY with valid JSON — no markdown, no code fences.
 
 ${jobTarget ? `Target role: ${jobTarget}` : ''}
 CV: ${cvContent.substring(0, 4000)}
 
-JSON structure:
+JSON:
 {
   "score": <integer 0-100>,
   "verdict": "<5-8 word brutal verdict>",
   "tagline": "<one savage but motivating sentence>",
-  "killing_chances": "<bullet points separated by newlines>",
-  "missed_opportunities": "<bullet points separated by newlines>",
-  "quick_wins": "<bullet points separated by newlines>",
-  "what_works": "<bullet points separated by newlines>"
+  "killing_chances": "<newline-separated bullet points>",
+  "missed_opportunities": "<newline-separated bullet points>",
+  "quick_wins": "<newline-separated bullet points>",
+  "what_works": "<newline-separated bullet points>"
 }`;
 
   try {
     const text = await callGemini(prompt);
     const result = JSON.parse(text.replace(/```json|```/g, '').trim());
 
-    const { data: row, error } = await supabase.from('roasts').insert({
-      cv_text: cvContent, job_title: jobTarget || null,
-      score: result.score, verdict: result.verdict,
-      killing_chances: result.killing_chances, missed_opportunities: result.missed_opportunities,
-      quick_wins: result.quick_wins, what_works: result.what_works, payment_status: 'free'
-    }).select('id').single();
-
-    if (error) console.warn('Supabase:', error.message);
-    currentRoastId = row?.id || null;
-
-    sessionStorage.setItem('cvText', cvContent);
-    sessionStorage.setItem('jobTarget', jobTarget);
-    if (currentRoastId) sessionStorage.setItem('roastId', currentRoastId);
-
     clearInterval(loadingInterval);
     document.getElementById('loadingState').classList.remove('visible');
-    renderResults(result);
-    showPage('page-results');
+
+    if (currentUser) {
+      // Logged in — save and show results immediately
+      await saveRoastToSupabase(result, cvContent, jobTarget, currentUser.id);
+      renderResults(result);
+      showPage('page-results');
+    } else {
+      // Not logged in — show auth gate
+      pendingRoastData = { result, cvContent, jobTarget };
+      document.getElementById('authGate').classList.add('visible');
+      document.getElementById('uploadSection').style.display = 'block';
+      document.getElementById('roastBtn').disabled = false;
+    }
 
   } catch (err) {
     clearInterval(loadingInterval);
@@ -513,6 +755,23 @@ JSON structure:
     document.getElementById('roastBtn').disabled = false;
     showErr('Something went wrong. Please try again.');
   }
+}
+
+async function saveRoastToSupabase(result, cvContent, jobTarget, userId) {
+  try {
+    const { data: row, error } = await supabase.from('roasts').insert({
+      user_id: userId, cv_text: cvContent, job_title: jobTarget || null,
+      score: result.score, verdict: result.verdict, tagline: result.tagline,
+      killing_chances: result.killing_chances, missed_opportunities: result.missed_opportunities,
+      quick_wins: result.quick_wins, what_works: result.what_works, payment_status: 'free'
+    }).select('id').single();
+    if (!error && row) {
+      currentRoastId = row.id;
+      sessionStorage.setItem('roastId', row.id);
+      sessionStorage.setItem('cvText', cvContent);
+      sessionStorage.setItem('jobTarget', jobTarget || '');
+    }
+  } catch (e) { console.warn('Supabase save error:', e); }
 }
 
 function renderResults(r) {
@@ -531,52 +790,46 @@ function renderResults(r) {
   ].forEach((b, i) => {
     if (!r[b.key]) return;
     const lines = r[b.key].split('\n').filter(l => l.trim());
-    const el = document.createElement('div');
-    el.className = 'roast-block'; el.style.animationDelay = (i * 0.08) + 's';
-    el.innerHTML = `<div class="roast-block-header"><span class="roast-icon">${b.icon}</span><span class="roast-block-title ${b.cls}">${b.title}</span></div><ul class="roast-items">${lines.map(l => `<li>${l.replace(/^[-•*]\s*/,'')}</li>`).join('')}</ul>`;
-    grid.appendChild(el);
+    const card = document.createElement('div');
+    card.className = 'roast-block'; card.style.animationDelay = (i * 0.08) + 's';
+    card.innerHTML = `<div class="roast-block-header"><span class="roast-icon">${b.icon}</span><span class="roast-block-title ${b.cls}">${b.title}</span></div><ul class="roast-items">${lines.map(l => `<li>${l.replace(/^[-•*]\s*/,'')}</li>`).join('')}</ul>`;
+    grid.appendChild(card);
   });
 }
 
+// ── PAYFAST ──
 function payWithPayFast() {
   document.getElementById('pf_return_url').value = `${APP_URL}/?payment=success`;
   document.getElementById('pf_cancel_url').value = `${APP_URL}/`;
   document.getElementById('pf_payment_id').value = currentRoastId || 'guest';
-  sessionStorage.setItem('cvText', currentCVText);
-  sessionStorage.setItem('jobTarget', document.getElementById('jobTarget').value.trim());
-  if (currentRoastId) sessionStorage.setItem('roastId', currentRoastId);
   document.getElementById('payfastForm').submit();
 }
 
+// ── FULL PACKAGE ──
 async function generateAndSaveFullPackage(roastId, cvText, jobTarget) {
-  const prompt = `You are an expert CV writer. Generate a complete professional package based on this CV.
-
+  const prompt = `You are an expert CV writer. Generate a complete professional package.
 ${jobTarget ? `Target role: ${jobTarget}` : ''}
 CV: ${cvText.substring(0, 3500)}
-
 Respond ONLY with valid JSON, no markdown:
 {
-  "full_rewrite": "<complete professionally rewritten CV as plain text with clear sections>",
-  "cover_letter": "<tailored 3-paragraph professional cover letter>",
-  "linkedin_headline": "<punchy LinkedIn headline under 200 characters>",
-  "ats_keywords": "<comma-separated list of 8-10 ATS keywords>",
-  "latex_code": "<complete professional LaTeX CV code ready to compile>"
+  "full_rewrite": "<complete rewritten CV as plain text>",
+  "cover_letter": "<tailored 3-paragraph cover letter>",
+  "linkedin_headline": "<punchy headline under 200 chars>",
+  "ats_keywords": "<comma-separated 8-10 keywords>",
+  "latex_code": "<complete LaTeX CV code ready to compile>"
 }`;
 
   try {
     const text = await callGemini(prompt);
     const result = JSON.parse(text.replace(/```json|```/g, '').trim());
-
     document.getElementById('cvRewriteText').textContent = result.full_rewrite || '';
     document.getElementById('coverLetterText').textContent = result.cover_letter || '';
     document.getElementById('latexCode').value = result.latex_code || '';
     document.getElementById('linkedinHeadline').textContent = result.linkedin_headline || '';
-
-    const keywords = (result.ats_keywords || '').split(',').map(k => k.trim()).filter(Boolean);
-    document.getElementById('atsKeywords').innerHTML = keywords.map(k =>
+    const kw = (result.ats_keywords || '').split(',').map(k => k.trim()).filter(Boolean);
+    document.getElementById('atsKeywords').innerHTML = kw.map(k =>
       `<span style="background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.2);border-radius:4px;padding:3px 8px;font-size:11px;color:var(--fire2);font-family:'Syne Mono',monospace;">${k}</span>`
     ).join('');
-
     if (roastId) {
       await supabase.from('roasts').update({
         payment_status: 'paid', full_rewrite: result.full_rewrite,
@@ -584,17 +837,64 @@ Respond ONLY with valid JSON, no markdown:
         ats_keywords: result.ats_keywords, latex_code: result.latex_code
       }).eq('id', roastId);
     }
-  } catch (err) {
+  } catch {
     document.getElementById('cvRewriteText').textContent = 'Error generating package. Please contact support.';
   }
 }
 
+// ── DASHBOARD ──
+async function loadDashboard() {
+  if (!currentUser) { showPage('page-login'); return; }
+  document.getElementById('dashLoading').style.display = 'block';
+  document.getElementById('dashEmpty').style.display = 'none';
+  document.getElementById('dashList').innerHTML = '';
+  const name = currentUser.user_metadata?.full_name?.split(' ')[0] || 'there';
+  document.getElementById('dashSubtitle').textContent = `Welcome back, ${name}! Here are all your roasts.`;
+
+  try {
+    const { data, error } = await supabase.from('roasts')
+      .select('id,score,verdict,job_title,created_at,payment_status')
+      .eq('user_id', currentUser.id)
+      .order('created_at', { ascending: false });
+
+    document.getElementById('dashLoading').style.display = 'none';
+    if (error || !data || data.length === 0) { document.getElementById('dashEmpty').style.display = 'block'; return; }
+
+    const total = data.length;
+    const avg = Math.round(data.reduce((s, r) => s + r.score, 0) / total);
+    const best = Math.max(...data.map(r => r.score));
+    document.getElementById('dashTotal').textContent = total;
+    document.getElementById('dashAvg').textContent = avg;
+    document.getElementById('dashBest').textContent = best;
+
+    const list = document.getElementById('dashList');
+    data.forEach(roast => {
+      const cls = roast.score < 35 ? 'bad' : roast.score < 55 ? 'ok' : roast.score < 75 ? 'good' : 'great';
+      const card = document.createElement('div');
+      card.className = 'history-card';
+      card.innerHTML = `
+        <div class="history-score ${cls}">${roast.score}</div>
+        <div class="history-info">
+          <div class="history-verdict">"${roast.verdict}"</div>
+          <div class="history-meta">
+            ${roast.job_title ? `<span>🎯 ${roast.job_title}</span>` : ''}
+            <span>📅 ${new Date(roast.created_at).toLocaleDateString()}</span>
+          </div>
+        </div>
+        <span class="history-status ${roast.payment_status}">${roast.payment_status === 'paid' ? '✅ Fixed' : '🔥 Roasted'}</span>`;
+      list.appendChild(card);
+    });
+  } catch { document.getElementById('dashLoading').textContent = 'Failed to load roasts.'; }
+}
+
+// ── WALL OF SHAME ──
 async function loadWallOfShame() {
   document.getElementById('wallLoading').style.display = 'block';
   document.getElementById('wallEmpty').style.display = 'none';
   document.getElementById('wallList').innerHTML = '';
   try {
-    const { data, error } = await supabase.from('roasts').select('id,score,verdict,job_title,created_at')
+    const { data, error } = await supabase.from('roasts')
+      .select('id,score,verdict,job_title,created_at')
       .order('score', { ascending: true }).lt('score', 50).limit(20);
     document.getElementById('wallLoading').style.display = 'none';
     if (error || !data || data.length === 0) { document.getElementById('wallEmpty').style.display = 'block'; return; }
@@ -602,7 +902,6 @@ async function loadWallOfShame() {
     data.forEach((roast, i) => {
       const cls = roast.score < 20 ? 'bad' : roast.score < 35 ? 'ok' : 'meh';
       const emoji = roast.score < 20 ? '💀' : roast.score < 35 ? '🔥' : '😬';
-      const flames = '🔥'.repeat(Math.max(1, Math.ceil((50 - roast.score) / 10)));
       const card = document.createElement('div');
       card.className = 'shame-card';
       card.innerHTML = `
@@ -618,13 +917,14 @@ async function loadWallOfShame() {
             <span class="shame-date">${new Date(roast.created_at).toLocaleDateString()}</span>
           </div>
           <div class="shame-verdict">"${roast.verdict}"</div>
-          <div style="margin-top:8px;font-size:16px;">${flames}</div>
+          <div style="margin-top:8px;font-size:16px;">${'🔥'.repeat(Math.max(1,Math.ceil((50-roast.score)/10)))}</div>
         </div>`;
       list.appendChild(card);
     });
   } catch { document.getElementById('wallLoading').textContent = 'Failed to load.'; }
 }
 
+// ── UTILS ──
 function showErr(msg) { const el = document.getElementById('errBox'); el.textContent = '→ ' + msg; el.classList.add('visible'); document.getElementById('roastBtn').disabled = false; }
 
 function copyText(btn, text) {
@@ -638,6 +938,7 @@ function copyText(btn, text) {
 function resetApp() {
   document.getElementById('uploadSection').style.display = 'block';
   document.getElementById('loadingState').classList.remove('visible');
+  document.getElementById('authGate').classList.remove('visible');
   document.getElementById('roastBtn').disabled = false;
   document.getElementById('pdfInput').value = '';
   document.getElementById('cvText').value = '';
@@ -645,7 +946,7 @@ function resetApp() {
   document.getElementById('fileSelectedMsg').style.display = 'none';
   document.getElementById('errBox').classList.remove('visible');
   document.getElementById('roastGrid').innerHTML = '';
-  currentCVText = ''; currentRoastId = null;
+  currentCVText = ''; currentRoastId = null; pendingRoastData = null;
   sessionStorage.clear();
 }
 </script>
