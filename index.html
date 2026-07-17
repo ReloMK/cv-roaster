@@ -553,7 +553,8 @@ const GEMINI_API_KEY   = 'AIzaSyBwHthqmqPbpwmCRsqrvNUy1rLPUxrz894';
 const APP_URL          = 'https://relomk.github.io/cv-roaster';
 // ══════════════════════════════════════════════
 
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${GEMINI_API_KEY}`;
+// GEMINI CHANGE: gemini-2.0-flash-exp was shut down; use Google's supported Flash model.
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 // AUTH CHANGE: avoid colliding with the Supabase CDN's global `supabase` name.
@@ -696,7 +697,8 @@ async function callGemini(prompt) {
     body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.7, maxOutputTokens: 2048 } })
   });
   const data = await res.json();
-  if (!data.candidates?.[0]) throw new Error('No AI response');
+  if (!res.ok) throw new Error(data.error?.message || `Gemini request failed (${res.status})`);
+  if (!data.candidates?.[0]) throw new Error('Gemini returned no usable response');
   return data.candidates[0].content.parts[0].text;
 }
 
