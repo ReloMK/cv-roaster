@@ -284,6 +284,8 @@ footer { text-align: center; padding: 40px 0 20px; font-size: 12px; color: var(-
       <span class="nav-user-name" id="navUserName"></span>
       <button class="nav-btn nav-ghost" onclick="showPage('page-dashboard')">My Roasts</button>
       <button class="nav-btn nav-ghost" onclick="signOut()">Sign Out</button>
+      <!-- AUTH CHANGE: populated from the Google profile without changing nav styling. -->
+      <img class="nav-avatar" id="navAvatar" alt="Your profile avatar" referrerpolicy="no-referrer">
     </div>
   </div>
 </nav>
@@ -341,7 +343,8 @@ footer { text-align: center; padding: 40px 0 20px; font-size: 12px; color: var(-
   <!-- Auth gate shown after roast if not logged in -->
   <div class="auth-gate" id="authGate">
     <h2>Your Roast is <em>Ready!</em></h2>
-    <p>Sign in with Google to see your CV score, brutal feedback, and save your results. It's free and takes 5 seconds.</p>
+    <!-- AUTH CHANGE: required post-roast login message. -->
+    <p>Your roast is ready. Sign in with Google to view your results and save them to your dashboard.</p>
     <button class="google-btn" onclick="signInWithGoogle()">
       <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
       Continue with Google
@@ -480,6 +483,11 @@ footer { text-align: center; padding: 40px 0 20px; font-size: 12px; color: var(-
   <div class="dashboard-header">
     <h1>My Roasts 🔥</h1>
     <p id="dashSubtitle">Your CV roasting history</p>
+    <!-- AUTH CHANGE: profile details required by the dashboard. -->
+    <div style="display:flex;align-items:center;gap:12px;margin-top:20px;">
+      <img class="nav-avatar" id="dashAvatar" alt="Your profile avatar" referrerpolicy="no-referrer">
+      <div><div id="dashName" style="font-family:'Syne',sans-serif;font-weight:700;"></div><div id="dashEmail" style="font-size:13px;color:var(--muted);"></div></div>
+    </div>
   </div>
   <div class="dashboard-stats">
     <div class="dash-stat"><div class="dash-stat-num" id="dashTotal">0</div><div class="dash-stat-label">Total Roasts</div></div>
@@ -538,8 +546,8 @@ footer { text-align: center; padding: 40px 0 20px; font-size: 12px; color: var(-
 // ══════════════════════════════════════════════
 // ⚙️  CONFIG — REPLACE WITH YOUR REAL VALUES
 // ══════════════════════════════════════════════
-const SUPABASE_URL     = 'YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL     = 'https://qejqlazpjdhebihqdtos.supabase.co/rest/v1/';
+const SUPABASE_ANON_KEY = 'sb_publishable_uJJp49EbJ05jFt0lwoUqHA_92YCoJ4v';
 const GEMINI_API_KEY   = 'AIzaSyBwHthqmqPbpwmCRsqrvNUy1rLPUxrz894';
 const APP_URL          = 'https://relomk.github.io/cv-roaster';
 // ══════════════════════════════════════════════
@@ -571,9 +579,15 @@ function showPage(id) {
 
 // ── AUTH ──
 window.addEventListener('load', async () => {
+  // AUTH CHANGE: OAuth redirects reload the page, so preserve only this tab's
+  // pending result until it can be saved for the authenticated user.
+  restorePendingRoast();
   // Handle OAuth redirect
   const { data: { session } } = await supabase.auth.getSession();
-  if (session?.user) handleUserSession(session.user);
+  if (session?.user) {
+    handleUserSession(session.user);
+    await completePendingRoast(session.user);
+  }
 
   // Handle PayFast return
   const params = new URLSearchParams(window.location.search);
@@ -591,13 +605,7 @@ window.addEventListener('load', async () => {
     if (event === 'SIGNED_IN' && session?.user) {
       handleUserSession(session.user);
       // If user just signed in and there's a pending roast — show results
-      if (pendingRoastData) {
-        await saveRoastToSupabase(pendingRoastData.result, pendingRoastData.cvContent, pendingRoastData.jobTarget, session.user.id);
-        renderResults(pendingRoastData.result);
-        document.getElementById('authGate').classList.remove('visible');
-        showPage('page-results');
-        pendingRoastData = null;
-      }
+      await completePendingRoast(session.user);
     }
     if (event === 'SIGNED_OUT') {
       currentUser = null;
@@ -617,6 +625,10 @@ function updateNav(user) {
     document.getElementById('navUser').style.display = 'flex';
     const name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
     document.getElementById('navUserName').textContent = name;
+    const avatar = user.user_metadata?.avatar_url || user.user_metadata?.picture || '';
+    const navAvatar = document.getElementById('navAvatar');
+    navAvatar.src = avatar;
+    navAvatar.style.visibility = avatar ? 'visible' : 'hidden';
   } else {
     document.getElementById('navGuest').style.display = 'flex';
     document.getElementById('navUser').style.display = 'none';
@@ -624,14 +636,18 @@ function updateNav(user) {
 }
 
 async function signInWithGoogle() {
-  await supabase.auth.signInWithOAuth({
+  const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: `${APP_URL}/?payment=none` }
+    options: { redirectTo: APP_URL }
   });
+  if (error) showErr('Google sign-in could not start. Please try again.');
 }
 
 async function signOut() {
   await supabase.auth.signOut();
+  // Never let a later account inherit a previous user's pending CV in this tab.
+  pendingRoastData = null;
+  sessionStorage.removeItem('pendingRoast');
   showPage('page-home');
 }
 
@@ -743,6 +759,7 @@ JSON:
     } else {
       // Not logged in — show auth gate
       pendingRoastData = { result, cvContent, jobTarget };
+      persistPendingRoast();
       document.getElementById('authGate').classList.add('visible');
       document.getElementById('uploadSection').style.display = 'block';
       document.getElementById('roastBtn').disabled = false;
@@ -758,20 +775,43 @@ JSON:
 }
 
 async function saveRoastToSupabase(result, cvContent, jobTarget, userId) {
-  try {
-    const { data: row, error } = await supabase.from('roasts').insert({
+  const { data: row, error } = await supabase.from('roasts').insert({
+      // AUTH CHANGE: RLS verifies this is exactly auth.uid().
       user_id: userId, cv_text: cvContent, job_title: jobTarget || null,
       score: result.score, verdict: result.verdict, tagline: result.tagline,
       killing_chances: result.killing_chances, missed_opportunities: result.missed_opportunities,
       quick_wins: result.quick_wins, what_works: result.what_works, payment_status: 'free'
     }).select('id').single();
-    if (!error && row) {
-      currentRoastId = row.id;
-      sessionStorage.setItem('roastId', row.id);
-      sessionStorage.setItem('cvText', cvContent);
-      sessionStorage.setItem('jobTarget', jobTarget || '');
-    }
-  } catch (e) { console.warn('Supabase save error:', e); }
+  if (error) throw error;
+  currentRoastId = row.id;
+  sessionStorage.setItem('roastId', row.id);
+  sessionStorage.setItem('cvText', cvContent);
+  sessionStorage.setItem('jobTarget', jobTarget || '');
+  return row;
+}
+
+// AUTH CHANGE: helpers make the login gate survive a Supabase OAuth redirect.
+function persistPendingRoast() {
+  sessionStorage.setItem('pendingRoast', JSON.stringify(pendingRoastData));
+}
+function restorePendingRoast() {
+  try { pendingRoastData = JSON.parse(sessionStorage.getItem('pendingRoast')) || pendingRoastData; }
+  catch { sessionStorage.removeItem('pendingRoast'); }
+}
+async function completePendingRoast(user) {
+  if (!pendingRoastData || completePendingRoast.running) return;
+  completePendingRoast.running = true;
+  try {
+    await saveRoastToSupabase(pendingRoastData.result, pendingRoastData.cvContent, pendingRoastData.jobTarget, user.id);
+    renderResults(pendingRoastData.result);
+    document.getElementById('authGate').classList.remove('visible');
+    pendingRoastData = null;
+    sessionStorage.removeItem('pendingRoast');
+    showPage('page-results');
+  } catch (error) {
+    console.error('Could not save pending roast:', error);
+    showErr('Your roast is ready, but we could not save it. Please try signing in again.');
+  } finally { completePendingRoast.running = false; }
 }
 
 function renderResults(r) {
@@ -850,6 +890,12 @@ async function loadDashboard() {
   document.getElementById('dashList').innerHTML = '';
   const name = currentUser.user_metadata?.full_name?.split(' ')[0] || 'there';
   document.getElementById('dashSubtitle').textContent = `Welcome back, ${name}! Here are all your roasts.`;
+  const fullName = currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'User';
+  const avatar = currentUser.user_metadata?.avatar_url || currentUser.user_metadata?.picture || '';
+  document.getElementById('dashName').textContent = fullName;
+  document.getElementById('dashEmail').textContent = currentUser.email || '';
+  document.getElementById('dashAvatar').src = avatar;
+  document.getElementById('dashAvatar').style.visibility = avatar ? 'visible' : 'hidden';
 
   try {
     const { data, error } = await supabase.from('roasts')
@@ -875,13 +921,19 @@ async function loadDashboard() {
       card.innerHTML = `
         <div class="history-score ${cls}">${roast.score}</div>
         <div class="history-info">
-          <div class="history-verdict">"${roast.verdict}"</div>
+          <div class="history-verdict">"${escapeHtml(roast.verdict)}"</div>
           <div class="history-meta">
-            ${roast.job_title ? `<span>🎯 ${roast.job_title}</span>` : ''}
+            ${roast.job_title ? `<span>🎯 ${escapeHtml(roast.job_title)}</span>` : ''}
             <span>📅 ${new Date(roast.created_at).toLocaleDateString()}</span>
           </div>
         </div>
         <span class="history-status ${roast.payment_status}">${roast.payment_status === 'paid' ? '✅ Fixed' : '🔥 Roasted'}</span>`;
+      const viewButton = document.createElement('button');
+      viewButton.className = 'nav-btn nav-ghost';
+      viewButton.type = 'button';
+      viewButton.textContent = 'View Roast';
+      viewButton.addEventListener('click', () => openRoast(roast.id));
+      card.appendChild(viewButton);
       list.appendChild(card);
     });
   } catch { document.getElementById('dashLoading').textContent = 'Failed to load roasts.'; }
@@ -893,9 +945,8 @@ async function loadWallOfShame() {
   document.getElementById('wallEmpty').style.display = 'none';
   document.getElementById('wallList').innerHTML = '';
   try {
-    const { data, error } = await supabase.from('roasts')
-      .select('id,score,verdict,job_title,created_at')
-      .order('score', { ascending: true }).lt('score', 50).limit(20);
+    // WALL CHANGE: the SECURITY DEFINER RPC exposes only safe public fields.
+    const { data, error } = await supabase.rpc('public_wall_of_shame', { max_rows: 20 });
     document.getElementById('wallLoading').style.display = 'none';
     if (error || !data || data.length === 0) { document.getElementById('wallEmpty').style.display = 'block'; return; }
     const list = document.getElementById('wallList');
@@ -913,10 +964,10 @@ async function loadWallOfShame() {
         <div class="shame-content">
           <div class="shame-meta">
             <span class="shame-rank">#${i+1} WORST CV</span>
-            ${roast.job_title ? `<span class="shame-job">Applied for: ${roast.job_title}</span>` : ''}
+            ${roast.job_title ? `<span class="shame-job">Applied for: ${escapeHtml(roast.job_title)}</span>` : ''}
             <span class="shame-date">${new Date(roast.created_at).toLocaleDateString()}</span>
           </div>
-          <div class="shame-verdict">"${roast.verdict}"</div>
+          <div class="shame-verdict">"${escapeHtml(roast.verdict)}"</div>
           <div style="margin-top:8px;font-size:16px;">${'🔥'.repeat(Math.max(1,Math.ceil((50-roast.score)/10)))}</div>
         </div>`;
       list.appendChild(card);
@@ -926,6 +977,26 @@ async function loadWallOfShame() {
 
 // ── UTILS ──
 function showErr(msg) { const el = document.getElementById('errBox'); el.textContent = '→ ' + msg; el.classList.add('visible'); document.getElementById('roastBtn').disabled = false; }
+
+// DASHBOARD CHANGE: fetch one row through RLS, then reopen the existing results UI.
+async function openRoast(roastId) {
+  if (!currentUser) { showPage('page-login'); return; }
+  const { data: roast, error } = await supabase.from('roasts').select('*').eq('id', roastId).single();
+  if (error || !roast) { alert('This roast is no longer available.'); return; }
+  currentRoastId = roast.id;
+  currentCVText = roast.cv_text || '';
+  sessionStorage.setItem('roastId', roast.id);
+  sessionStorage.setItem('cvText', currentCVText);
+  sessionStorage.setItem('jobTarget', roast.job_title || '');
+  renderResults(roast);
+  showPage('page-results');
+}
+
+function escapeHtml(value) {
+  const node = document.createElement('div');
+  node.textContent = value == null ? '' : String(value);
+  return node.innerHTML;
+}
 
 function copyText(btn, text) {
   navigator.clipboard.writeText(text).then(() => {
