@@ -546,7 +546,8 @@ footer { text-align: center; padding: 40px 0 20px; font-size: 12px; color: var(-
 // ══════════════════════════════════════════════
 // ⚙️  CONFIG — REPLACE WITH YOUR REAL VALUES
 // ══════════════════════════════════════════════
-const SUPABASE_URL     = 'https://qejqlazpjdhebihqdtos.supabase.co/rest/v1/';
+// CONFIG CHANGE: use the project root URL, not its /rest/v1 API endpoint.
+const SUPABASE_URL     = 'https://qejqlazpjdhebihqdtos.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_uJJp49EbJ05jFt0lwoUqHA_92YCoJ4v';
 const GEMINI_API_KEY   = 'AIzaSyBwHthqmqPbpwmCRsqrvNUy1rLPUxrz894';
 const APP_URL          = 'https://relomk.github.io/cv-roaster';
@@ -555,7 +556,8 @@ const APP_URL          = 'https://relomk.github.io/cv-roaster';
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${GEMINI_API_KEY}`;
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// AUTH CHANGE: avoid colliding with the Supabase CDN's global `supabase` name.
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let activeTab = 'pdf', currentCVText = '', currentRoastId = null, currentUser = null;
 let pendingRoastData = null; // stores roast result while waiting for login
@@ -583,7 +585,7 @@ window.addEventListener('load', async () => {
   // pending result until it can be saved for the authenticated user.
   restorePendingRoast();
   // Handle OAuth redirect
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await supabaseClient.auth.getSession();
   if (session?.user) {
     handleUserSession(session.user);
     await completePendingRoast(session.user);
@@ -601,7 +603,7 @@ window.addEventListener('load', async () => {
   }
 
   // Listen for auth changes (Google redirect comes back as SIGNED_IN)
-  supabase.auth.onAuthStateChange(async (event, session) => {
+  supabaseClient.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN' && session?.user) {
       handleUserSession(session.user);
       // If user just signed in and there's a pending roast — show results
@@ -636,7 +638,7 @@ function updateNav(user) {
 }
 
 async function signInWithGoogle() {
-  const { error } = await supabase.auth.signInWithOAuth({
+  const { error } = await supabaseClient.auth.signInWithOAuth({
     provider: 'google',
     options: { redirectTo: APP_URL }
   });
@@ -644,7 +646,7 @@ async function signInWithGoogle() {
 }
 
 async function signOut() {
-  await supabase.auth.signOut();
+  await supabaseClient.auth.signOut();
   // Never let a later account inherit a previous user's pending CV in this tab.
   pendingRoastData = null;
   sessionStorage.removeItem('pendingRoast');
@@ -775,7 +777,7 @@ JSON:
 }
 
 async function saveRoastToSupabase(result, cvContent, jobTarget, userId) {
-  const { data: row, error } = await supabase.from('roasts').insert({
+  const { data: row, error } = await supabaseClient.from('roasts').insert({
       // AUTH CHANGE: RLS verifies this is exactly auth.uid().
       user_id: userId, cv_text: cvContent, job_title: jobTarget || null,
       score: result.score, verdict: result.verdict, tagline: result.tagline,
@@ -871,7 +873,7 @@ Respond ONLY with valid JSON, no markdown:
       `<span style="background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.2);border-radius:4px;padding:3px 8px;font-size:11px;color:var(--fire2);font-family:'Syne Mono',monospace;">${k}</span>`
     ).join('');
     if (roastId) {
-      await supabase.from('roasts').update({
+      await supabaseClient.from('roasts').update({
         payment_status: 'paid', full_rewrite: result.full_rewrite,
         cover_letter: result.cover_letter, linkedin_headline: result.linkedin_headline,
         ats_keywords: result.ats_keywords, latex_code: result.latex_code
@@ -898,7 +900,7 @@ async function loadDashboard() {
   document.getElementById('dashAvatar').style.visibility = avatar ? 'visible' : 'hidden';
 
   try {
-    const { data, error } = await supabase.from('roasts')
+    const { data, error } = await supabaseClient.from('roasts')
       .select('id,score,verdict,job_title,created_at,payment_status')
       .eq('user_id', currentUser.id)
       .order('created_at', { ascending: false });
@@ -946,7 +948,7 @@ async function loadWallOfShame() {
   document.getElementById('wallList').innerHTML = '';
   try {
     // WALL CHANGE: the SECURITY DEFINER RPC exposes only safe public fields.
-    const { data, error } = await supabase.rpc('public_wall_of_shame', { max_rows: 20 });
+    const { data, error } = await supabaseClient.rpc('public_wall_of_shame', { max_rows: 20 });
     document.getElementById('wallLoading').style.display = 'none';
     if (error || !data || data.length === 0) { document.getElementById('wallEmpty').style.display = 'block'; return; }
     const list = document.getElementById('wallList');
@@ -981,7 +983,7 @@ function showErr(msg) { const el = document.getElementById('errBox'); el.textCon
 // DASHBOARD CHANGE: fetch one row through RLS, then reopen the existing results UI.
 async function openRoast(roastId) {
   if (!currentUser) { showPage('page-login'); return; }
-  const { data: roast, error } = await supabase.from('roasts').select('*').eq('id', roastId).single();
+  const { data: roast, error } = await supabaseClient.from('roasts').select('*').eq('id', roastId).single();
   if (error || !roast) { alert('This roast is no longer available.'); return; }
   currentRoastId = roast.id;
   currentCVText = roast.cv_text || '';
