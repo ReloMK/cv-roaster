@@ -549,7 +549,9 @@ footer { text-align: center; padding: 40px 0 20px; font-size: 12px; color: var(-
 // CONFIG CHANGE: use the project root URL, not its /rest/v1 API endpoint.
 const SUPABASE_URL     = 'https://qejqlazpjdhebihqdtos.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_uJJp49EbJ05jFt0lwoUqHA_92YCoJ4v';
-const APP_URL          = 'https://relomk.github.io/cv-roaster';
+// AUTH CHANGE: GitHub Pages serves this project at the trailing-slash URL.
+// OAuth must return to this exact URL so the session fragment is preserved.
+const APP_URL          = 'https://relomk.github.io/cv-roaster/';
 // ══════════════════════════════════════════════
 
 // GEMINI CHANGE: Gemini calls are made by a Supabase Edge Function. Never put
