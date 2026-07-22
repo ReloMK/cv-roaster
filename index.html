@@ -768,11 +768,14 @@ JSON:
     }
 
   } catch (err) {
+    // DIAGNOSTIC CHANGE: retain the real error in DevTools and show a useful
+    // message while the secure Edge Function is being configured.
+    console.error('Roast generation failed:', err);
     clearInterval(loadingInterval);
     document.getElementById('loadingState').classList.remove('visible');
     document.getElementById('uploadSection').style.display = 'block';
     document.getElementById('roastBtn').disabled = false;
-    showErr('Something went wrong. Please try again.');
+    showErr(err?.message ? `Could not generate your roast: ${err.message}` : 'Something went wrong. Please try again.');
   }
 }
 
