@@ -1,0 +1,4 @@
+[functions.gemini-roast]
+# Guests can request a roast, so the function accepts the public anon key.
+# Browser CORS and payload validation are enforced in the function itself.
+verify_jwt = false

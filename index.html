@@ -549,12 +549,12 @@ footer { text-align: center; padding: 40px 0 20px; font-size: 12px; color: var(-
 // CONFIG CHANGE: use the project root URL, not its /rest/v1 API endpoint.
 const SUPABASE_URL     = 'https://qejqlazpjdhebihqdtos.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_uJJp49EbJ05jFt0lwoUqHA_92YCoJ4v';
-const GEMINI_API_KEY   = 'AIzaSyBwHthqmqPbpwmCRsqrvNUy1rLPUxrz894';
 const APP_URL          = 'https://relomk.github.io/cv-roaster';
 // ══════════════════════════════════════════════
 
-// GEMINI CHANGE: gemini-2.0-flash-exp was shut down; use Google's supported Flash model.
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+// GEMINI CHANGE: Gemini calls are made by a Supabase Edge Function. Never put
+// a Gemini key in this browser bundle or repository.
+const GEMINI_FUNCTION = 'gemini-roast';
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 // AUTH CHANGE: avoid colliding with the Supabase CDN's global `supabase` name.
@@ -692,14 +692,12 @@ async function extractPDFText(file) {
 
 // ── GEMINI ──
 async function callGemini(prompt) {
-  const res = await fetch(GEMINI_URL, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.7, maxOutputTokens: 2048 } })
+  const { data, error } = await supabaseClient.functions.invoke(GEMINI_FUNCTION, {
+    body: { prompt }
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error?.message || `Gemini request failed (${res.status})`);
-  if (!data.candidates?.[0]) throw new Error('Gemini returned no usable response');
-  return data.candidates[0].content.parts[0].text;
+  if (error) throw error;
+  if (!data?.text) throw new Error('Gemini returned no usable response');
+  return data.text;
 }
 
 // ── ROAST ──
